@@ -17,7 +17,7 @@ const createProject=async(projectData,res)=>{
             ...projectData
         })
         await newProject.save().then((data)=>{
-            res.status(400).json({data})
+            res.status(200).json({data})
         }).catch((error)=>res.status(404).json({error}))
     }
     catch(error){
@@ -25,10 +25,55 @@ const createProject=async(projectData,res)=>{
     }
 }
 
+const getProjectById=async(req,res)=>{
+    const project=await Projects.findById(req.params.id).exec()
+    if(!project){
+        res.status(404).json({message:`no project is Available in this id: ${req.params.id}`})
+    }
+    try{
+        await Projects.findOne({_id:req.params.id}).then((data)=>{
+            res.status(200).json({message:"Successfull",data})
+        }).catch((error)=>res.status(404).json({error}))
+    }
+    catch(error){
+        res.status(404).json({error})
+    }
+}
 
+const deleteProject=async(req,res)=>{
+    const project=await Projects.findById(req.params.id).exec()
+    if(!project){
+        res.status(404).json({message:`no project is Available in this id: ${req.params.id}`})
+    }
+    try{
+        await Projects.deleteOne({_id:req.params.id}).then((data)=>{
+            res.status(200).json({message:`Successfull deleted ${req.parms.id}`})
+        }).catch((error)=>res.status(404).json({error}))
+    }
+    catch(error){
+        res.status(404).json({error})
+    }
+}
 
+const updateProjectById=async(req,res)=>{
+    const Project=await Projects.findById(req.params.id).exec()
+    if(!Project){
+        res.status(404).json({message:`no project is Available in this id: ${req.params.id}`})
+    }
+    try{
+        await Projects.findByIdAndUpdate(req.params.id,{$set:req.body}).then((data)=>{
+            res.status(200).json({message:`Successfully Updated ${req.params.id}`})
+        }).catch((error)=>res.status(404).json({error}))
+    }
+    catch(error){
+        res.status(404).json({error})
+    }
+}
 
 module.exports={
     getAllProjects,
-    createProject
+    createProject,
+    getProjectById,
+    deleteProject,
+    updateProjectById
 }
