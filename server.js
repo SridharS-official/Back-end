@@ -11,7 +11,9 @@ const logger=require('morgan')
 app.use(express.json())//parsing 
 app.use(cors())//to handle wrong port number
 app.use(logger('dev'))
+
 connectDB();
+
 app.use('/api',userRouter)
 app.use('/task',taskRouter)
 // always last
