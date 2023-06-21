@@ -5,8 +5,8 @@ const app = express();
 const connectDB = require('./config/dbConn');
 const userRouter=require('./routes/userRoutes')
 const projectRouter=require('./routes/projectRoutes')
-//const PORT=process.env.PORT||8080
-const PORT=5000
+const PORT=process.env.PORT||8080
+//const PORT=5000
 const cors=require('cors')
 const logger=require('morgan')
 
