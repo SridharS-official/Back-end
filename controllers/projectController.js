@@ -1,10 +1,21 @@
 const Projects=require('../models/Projects')
+const Employee=require('../models/ProjectEmp')
 const mangoose=require('mongoose')
 
 const getAllProjects=async(req,res)=>{
     try{
         const project=await Projects.find({})
         res.status(200).json({project})
+    }
+    catch(error){
+        res.status(404).json({error})
+    }
+}
+
+const getEmployee=async(req,res)=>{
+    try{
+        const employee=await Employee.find({})
+        res.status(200).json({employee})
     }
     catch(error){
         res.status(404).json({error})
@@ -75,5 +86,6 @@ module.exports={
     createProject,
     getProjectById,
     deleteProjectById,
-    updateProjectById
+    updateProjectById,
+    getEmployee
 }

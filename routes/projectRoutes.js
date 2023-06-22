@@ -1,9 +1,13 @@
 const express=require('express')
 const router=express.Router()
-const {getAllProjects, createProject, getProjectById, updateProjectById, deleteProjectById }=require('../controllers/projectController')
+const {getAllProjects, createProject, getProjectById, updateProjectById, deleteProjectById, getEmployee }=require('../controllers/projectController')
 
 router.get('/projectLists',async(req,res)=>{
     await getAllProjects(req,res)
+})
+
+router.get('/employee',async(req,res)=>{
+    await getEmployee(req,res)
 })
 
 router.post('/createProject',async(req,res)=>{
