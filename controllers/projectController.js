@@ -1,6 +1,7 @@
 const Projects=require('../models/Projects')
 const Employee=require('../models/ProjectEmp')
 const mangoose=require('mongoose')
+const ProjectEmp = require('../models/ProjectEmp')
 
 const getAllProjects=async(req,res)=>{
     try{
@@ -16,6 +17,20 @@ const getEmployee=async(req,res)=>{
     try{
         const employee=await Employee.find({})
         res.status(200).json({employee})
+    }
+    catch(error){
+        res.status(404).json({error})
+    }
+}
+
+const createEmployee=async(projectEmpData,res)=>{
+    try{
+        const newProjectEmp = new ProjectEmp({
+            ...projectEmpData
+        })
+        await newProjectEmp.save().then((data)=>{
+            res.status(200).json({data})
+        }).catch((error)=>res.status(404).json({error}))
     }
     catch(error){
         res.status(404).json({error})
@@ -87,5 +102,6 @@ module.exports={
     getProjectById,
     deleteProjectById,
     updateProjectById,
-    getEmployee
+    getEmployee,
+    createEmployee
 }

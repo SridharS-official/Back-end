@@ -1,6 +1,6 @@
 const express=require('express')
 const router=express.Router()
-const {getAllProjects, createProject, getProjectById, updateProjectById, deleteProjectById, getEmployee }=require('../controllers/projectController')
+const {getAllProjects, createProject, getProjectById, updateProjectById, deleteProjectById, getEmployee, createEmployee }=require('../controllers/projectController')
 
 router.get('/projectLists',async(req,res)=>{
     await getAllProjects(req,res)
@@ -8,6 +8,10 @@ router.get('/projectLists',async(req,res)=>{
 
 router.get('/employee',async(req,res)=>{
     await getEmployee(req,res)
+})
+
+router.post('./createEmp', async(req,res)=>{
+    await createEmployee(req,res)
 })
 
 router.post('/createProject',async(req,res)=>{
