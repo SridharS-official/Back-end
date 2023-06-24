@@ -6,6 +6,8 @@ try{
         useNewUrlParser:true,
         useUnifiedTopology:true,
     })
+
+    
 }
 catch(error){
     console.log('error')

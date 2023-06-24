@@ -1,6 +1,6 @@
 const Task=require('../models/Task')
 const mongoose=require('mongoose')
-
+const otpgenerator =require('otp-generator')
 
 const getAllTasks=async(req,res)=>{
     try {
@@ -13,9 +13,16 @@ const getAllTasks=async(req,res)=>{
 }
 
 const createTask=async(taskData,res)=>{
+   
+        const OTP=otpgenerator.generate(4,{
+            upperCaseAlphabets:false,
+            specialChars:false
+        })
+        const taskId = 'Task-'+ OTP
     try{
       const newTask=new Task({
-        ...taskData
+        ...taskData,
+        taskId
       })
       await newTask.save().then((data)=>{
         res.status(200).json(data)
