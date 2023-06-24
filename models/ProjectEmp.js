@@ -9,26 +9,6 @@ const employeeSchema=new mongoose.Schema({
             default:"Software Associate"
         },
   },
- {
-    name: {
-        type:String,
-        default: "Ajay"
-    },
-    role: { 
-            type: String,
-            default:"Software Associate"
-        },
-  },
-  {
-    name: {
-        type:String,
-        default: "Prem"
-    },
-     role: { 
-            type: String,
-            default:"HR"
-        }
-    },
   {timestamps:true})
 
 
