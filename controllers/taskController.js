@@ -88,7 +88,7 @@ const updateTaskById=async(req,res)=>{
 }
 
 const deleteMultiple=async(req,res)=>{
-    const ids=req.body.array;
+    const ids=req.body;
   try{
       await Task.deleteMany({ _id: { $in: ids } }).then((data)=>{
               res.status(200).json({messsge:`successfully deleted ${ids}`})
