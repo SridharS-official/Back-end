@@ -1,6 +1,26 @@
 const express=require('express')
 const router=express.Router()
 const {getAllTasks, createTask,getTaskById,updateTaskById,deleteTaskById, savePdf}=require('../controllers/taskController')
+const multer = require('multer');
+
+// Set up storage for uploaded files
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    // Get the current date and time
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().replace(/:/g, '-');
+
+    // Generate a new filename with the current date and time
+    const fileName = formattedDate + '-' + file.originalname;
+
+    cb(null, fileName);
+  }
+});
+const upload = multer({ storage: storage });
+
 
 router.get('/task-list',async(req,res)=>{
     await getAllTasks(req,res)

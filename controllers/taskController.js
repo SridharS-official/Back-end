@@ -1,11 +1,6 @@
 const Task=require('../models/Task')
 const mongoose=require('mongoose')
 const otpgenerator =require('otp-generator')
-const multer = require('multer');
-
-// Set up storage for uploaded files
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 
 const getAllTasks=async(req,res)=>{
@@ -21,31 +16,31 @@ const getAllTasks=async(req,res)=>{
 const createTask=async(taskData,res)=>{
         var taskId = "1000"
         
-        //  const task = Task.find({}).sort({_id:-1}).limit(1)
-        //     if((await task).length > 0)
-        //     {
-        //         // let btw = task.taskId.split("-");
-        //         let prevId = task.taskId;
-        //         console.log(task)
-        //         let currentId = prevId+1;
-        //         const taskId = 'Task-'+ currentId
-        //         id = taskId
-        //     }
-        //     else{
-        //         const taskId = 'Task-'+id;
-        //         id=taskId
-        //     }
+         const task = Task.find({}).sort({_id:-1}).json()
+            if((await task).length > 0)
+            {
+                // let btw = task.taskId.split("-");
+                let prevId = task.taskId;
+                console.log(task)
+                let currentId = prevId+1;
+                const taskId = 'Task-'+ currentId
+                id = taskId
+            }
+            else{
+                const taskId = 'Task-'+id;
+                id=taskId
+            }
     try{
       const newTask=new Task({
         ...taskData,
         taskId
       })
-    //   if (req.file) {
-    //     newTask.pdf = {
-    //       data: req.file.buffer,
-    //       contentType: req.file.mimetype,
-    //     };
-    //   }
+      // if (req.files) {
+      //   newTask.pdf = {
+      //     data: req.files.file.data,
+      //     contentType: req.files.file.mimetype,
+      //   };
+      // }
       await newTask.save().then((data)=>{
         res.status(200).json(data)
       }).catch((err)=>res.status(404).json({err}))
@@ -105,23 +100,24 @@ const updateTaskById=async(req,res)=>{
 
 const savePdf = async (req, res) => {
     const taskId = req.params.id;
-    console.log(req.file)
+    console.log(req.files)
     try {
       // Find the task document by taskId
       const task = await Task.findOne({ _id:taskId });
       if (!task) {
         return res.status(404).json({ error: 'Task not found' });
       }
-      if (!req.file) {
+      if (!req.files) {
         return res.status(400).json({ error: 'No file uploaded' });
       }
-      const { buffer, mimetype } = req.file;
+      
+      const { buffer, mimetype } = req.files;
       task.pdf = {
-        data: buffer,
-        contentType: mimetype,
+        data: req.files.file.data,
+        contentType: req.files.file.mimetype,
       };
       
-      // Save the updated task document
+      console.log(task.pdf)
       await task.save();
       
       return res.status(200).json({ message: 'PDF saved successfully' });
