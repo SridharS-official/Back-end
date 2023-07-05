@@ -1,6 +1,6 @@
 const express=require('express')
 const router=express.Router()
-const {getAllTasks, createTask,getTaskById,updateTaskById,deleteTaskById, savePdf}=require('../controllers/taskController')
+const {getAllTasks, createTask,getTaskById,updateTaskById,deleteTaskById, deleteMultiple, savePdf}=require('../controllers/taskController')
 const multer = require('multer');
 
 // Set up storage for uploaded files
@@ -27,7 +27,7 @@ router.get('/task-list',async(req,res)=>{
 })
 
 router.post('/create-task',async(req,res)=>{
-    await createTask(req.body,res)
+    await createTask(req,res)
 })
 
 router.get('/task-list/:id',async(req,res)=>{
@@ -40,6 +40,10 @@ router.put('/task-list/:id',async(req,res)=>{
 
 router.delete('/task-list/:id',async(req,res)=>{
     await deleteTaskById(req,res)
+})
+
+router.delete('/task-list-multiple',async(req,res)=>{
+    await deleteMultiple(req,res)
 })
 
 router.put('/task-list-attach/:id',async(req,res)=>{
