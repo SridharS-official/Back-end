@@ -22,12 +22,12 @@ const createTask=async(req,res)=>{
               ...taskData,
               taskId
             })
-            if (req.files) {
-              newTask.pdf = {
-                data: req.files.file.data,
-                contentType: req.files.file.mimetype,
-              };
-            }
+            // if (req.files) {
+            //   newTask.pdf = {
+            //     data: req.files.file.data,
+            //     contentType: req.files.file.mimetype,
+            //   };
+            // }
             await newTask.save().then((data)=>{
               res.status(200).json(data)
             }).catch((err)=>res.status(404).json({err}))
