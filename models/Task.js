@@ -62,11 +62,12 @@ const taskSchema = new mongoose.Schema(
    type: {
     type:String,
     required:true
-    
     },
-   pdf: {
-      data: Buffer,
-      contentType: String,
+    comment:{
+      type : [String]
+    },
+   image: {
+      type:String
     }
   },
   {
