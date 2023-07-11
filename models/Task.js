@@ -66,20 +66,14 @@ const taskSchema = new mongoose.Schema(
     comment:{
       type : [String]
     },
-   image: {
-      type:String
+   attachment: {
+      data: Buffer,
+      contentType: String
     }
   },
   {
     timestamps: true,
   }
 );
-
-// taskSchema.plugin(autoIncrement.plugin, {
-//   model: 'Task',
-//   field: 'taskId',
-//   startAt: 1001,
-//   incrementBy: 1,
-// });
 
 module.exports = mongoose.model('Task', taskSchema);

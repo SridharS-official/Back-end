@@ -5,28 +5,29 @@ const multer = require('multer');
 
 // Set up storage for uploaded files
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    // Get the current date and time
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().replace(/:/g, '-');
-
-    // Generate a new filename with the current date and time
-    const fileName = formattedDate + '-' + file.originalname;
-
-    cb(null, fileName);
+    destination: (req, file, cb) => {
+      cb(null, 'upload')
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + ' -' + file.originalname)
+    }
+  })
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'application/pdf' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+      cb(null, true)
+    }
+    else {
+      cb(new Error('Only PDF, JPEG, and PNG files are allowed'))
+    }
   }
-});
-const upload = multer({ storage: storage });
 
+  const upload = multer({ storage: storage, fileFilter: fileFilter })
 
 router.get('/task-list',async(req,res)=>{
     await getAllTasks(req,res)
 })
 
-router.post('/create-task',async(req,res)=>{
+router.post('/create-task', upload.fields([{ name: 'attachment'}]),async(req,res)=>{
     await createTask(req,res)
 })
 
@@ -38,7 +39,7 @@ router.put('/task-list/:id',async(req,res)=>{
     await updateTaskById(req,res)
 })
 
-router.delete('/task-list/:id',async(req,res)=>{
+router.delete('/task-list',async(req,res)=>{
     await deleteTaskById(req,res)
 })
 
