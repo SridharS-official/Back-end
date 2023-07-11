@@ -17,7 +17,7 @@ const getAllTasks=async(req,res)=>{
 const createTask=async(req,res)=>{
         let taskData = req.body;
         Task.count().then(async (doc)=>{
-          if(doc>1)
+          if(doc>=1)
           {
             Task.findOne({}).sort({_id:-1}).exec().then( async function(data) {
               try{
