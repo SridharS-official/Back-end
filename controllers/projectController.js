@@ -60,12 +60,11 @@ const createEmployee = async (projectEmpData, res) => {
 
 
 const createProject = async (req, res) => {
-    let projectData = req.body;
+    const projectData = req.body;
     Projects.count().then(async (doc) => {
         if (doc >= 1) {
-            Projects.findOne({}).sort({ _id: -1 }).exec().then(async function (data) {
-
-                try {
+            Projects.findOne({}).sort({ _id:-1 }).exec().then(async function (data) {
+                 try {
                     let split = data.projectId.split("-")
                     const prevProject = parseInt(split[1])
                     console.log(split)
@@ -75,6 +74,7 @@ const createProject = async (req, res) => {
                     const newProject = new Projects({
                         ...projectData, projectId
                     })
+                    console.log(newProject);
                     await newProject.save().then((data) => {
                         res.status(200).json({ data })
                     }).catch((error) => res.status(404).json({ error }))
@@ -87,9 +87,9 @@ const createProject = async (req, res) => {
         else {
             try {
                 const projectId = "Project-1000";
+                console.log(projectId);
                 const newProject = new Projects({
-                    ...projectData,
-                    projectId
+                    ...projectData,projectId
                 })
                 await newProject.save().then((data) => {
                     res.status(200).json(data)
