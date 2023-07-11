@@ -69,31 +69,25 @@ const taskSchema = new mongoose.Schema(
    attachment: {
       data: Buffer,
       contentType: String
-   }
-    // name:{
-    //   type:String,
-    //   required:true
-    // },
-    // startTime:{
-    //   type:String,
-    //   required:true
-    // },
-    // endTime:{
-    //   type:String,
-    //   required:true
-    // },
-    // workingHour:{
-    //   type:String,
-    //   required:true
-    // },
-    // date:{
-    //   type:String,
-    //   required:true
-    // },
-    // details:{
-    //   type:String,
-    //   required:true
-    // }
+   },
+    name:{
+      type:String,
+    },
+    startTime:{
+      type:String,
+    },
+    endTime:{
+      type:String,
+    },
+    workingHour:{
+      type:String,
+    },
+    date:{
+      type:String,
+    },
+    details:{
+      type:String,
+    }
   },
   {
     timestamps: true,
