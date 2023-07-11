@@ -22,8 +22,11 @@ const createTask=async(req,res)=>{
             Task.findOne({}).sort({_id:-1}).exec().then( async function(data) {
               try{
                 let split = data.taskId.split("-")
+                const prevtask = parseInt(split[1])
                 console.log(split)
-               const taskId=data.taskId+1;
+               const currentid=prevtask+1;
+               const taskId="Task-"+currentid
+               console.log(taskId)
                 const newTask=new Task({
                   ...taskData,
                   taskId
