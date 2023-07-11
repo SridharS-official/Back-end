@@ -73,20 +73,36 @@ const getProjectById=async(req,res)=>{
     }
 }
 
-const deleteProjectById=async(req,res)=>{
-    const project=await Projects.findById(req.params.id).exec()
-    if(!project){
-        res.status(404).json({message:`no project is Available in this id: ${req.params.id}`})
+// const deleteProjectById=async(req,res)=>{
+//     const project=await Projects.findById(req.params.id).exec()
+//     if(!project){
+//         res.status(404).json({message:`no project is Available in this id: ${req.params.id}`})
+//     }
+//     try{
+//         await Projects.deleteOne({_id:req.params.id}).then((data)=>{
+//             res.status(200).json({message:`Successfull deleted ${req.params.id}`})
+//         }).catch((error)=>res.status(404).json({error}))
+//     }
+//     catch(error){
+//         res.status(404).json({error})
+//     }
+// }
+const deleteProjectsByIds = async (req, res) => {
+    const projectIds = req.body.ids; // Array of project IDs to be deleted
+  
+    try {
+      const deleteResult = await Projects.deleteMany({ _id: { $in: projectIds } });
+  
+      if (deleteResult.deletedCount === 0) {
+        res.status(404).json({ message: `No projects found with the given IDs` });
+      } else {
+        res.status(200).json({ message: `Successfully deleted ${deleteResult.deletedCount} projects` });
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-    try{
-        await Projects.deleteOne({_id:req.params.id}).then((data)=>{
-            res.status(200).json({message:`Successfull deleted ${req.params.id}`})
-        }).catch((error)=>res.status(404).json({error}))
-    }
-    catch(error){
-        res.status(404).json({error})
-    }
-}
+  };
+  
 
 const updateProjectById=async(req,res)=>{
     const Project=await Projects.findById(req.params.id).exec()
@@ -107,7 +123,7 @@ module.exports={
     getAllProjects,
     createProject,
     getProjectById,
-    deleteProjectById,
+    deleteProjectsByIds, // Updated function name
     updateProjectById,
     getEmployee,
     createEmployee

@@ -1,6 +1,6 @@
 const express=require('express')
 const router=express.Router()
-const {getAllProjects, createProject, getProjectById, updateProjectById, deleteProjectById, getEmployee, createEmployee }=require('../controllers/projectController')
+const {getAllProjects, createProject, getProjectById, updateProjectById, deleteProjectsByIds, getEmployee, createEmployee }=require('../controllers/projectController')
 
 router.get('/project',async(req,res)=>{
     await getAllProjects(req,res)
@@ -22,9 +22,13 @@ router.get('/project/:id',async(req,res)=>{
     await getProjectById(req,res)
 })
 
-router.delete('/project/:id',async(req,res)=>{
-    await deleteProjectById(req,res)
-})
+// router.delete('/project/:id',async(req,res)=>{
+//     await deleteProjectById(req,res)
+// })
+
+router.delete('/project/delete', async (req, res) => {
+    await deleteProjectsByIds(req, res); // Updated function name
+  });
 
 router.put('/project/:id',async(req,res)=>{
     await updateProjectById(req,res)

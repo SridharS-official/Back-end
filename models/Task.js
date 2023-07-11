@@ -71,8 +71,7 @@ const taskSchema = new mongoose.Schema(
       contentType: String
    },
     name:{
-      type:String,
-      required:true
+      type:String
     },
     startTime:{
       type:String,
@@ -83,8 +82,7 @@ const taskSchema = new mongoose.Schema(
       required:true
     },
     workingHour:{
-      type:String,
-      required:true
+      type:String
     },
     date:{
       type:String,
