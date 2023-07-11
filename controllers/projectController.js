@@ -64,7 +64,7 @@ const createProject = async (req, res) => {
         }
         else {
             try {
-                const projectId = "Task-1000";
+                const projectId = "Project-1000";
                 const newProject = new Task({
                     ...projectData,
                     projectId
