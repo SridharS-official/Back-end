@@ -16,7 +16,7 @@ router.get('/task-list/:id',async(req,res)=>{
     await getTaskById(req,res)
 })
 
-router.put('/task-list/:id',async(req,res)=>{
+router.put('/task-list/:id',uploadmiddleware,async(req,res)=>{
     await updateTaskById(req,res)
 })
 

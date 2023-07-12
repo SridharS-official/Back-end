@@ -16,10 +16,9 @@ const getAllTasks=async(req,res)=>{
 }
 
 const createTask=async(req,res)=>{
-        const{project,taskname,reporter,assignee,priority,duedate,description,summary,story,deliveryteam,type,sprint,targetrelease} = req.body;
-        const {image} = req.files;
+        const{Project,taskname,reporter,assignee,priority,duedate,description,summary,story,deliveryteam,type,sprint,targetrelease} = req.body;
         const urls = [];
-        if(image)
+        if(req.files)
         {
           const uploader = async (path) => await uploads(path, "snsset/task_attach");
           const files = req.files;
@@ -40,7 +39,7 @@ const createTask=async(req,res)=>{
                const currentid=prevtask+1;
                const taskId="Task-"+currentid
                 const newTask=new Task({
-                  project,
+                  Project,
                   taskname,
                   reporter,
                   assignee,
@@ -105,8 +104,21 @@ const updateTaskById=async(req,res)=>{
     if(!task){
         return  res.status(404).json({message:`no id is available ${req.params.id}`})
     }
+    const urls = [];
+    if(req.files)
+    {
+      const uploader = async (path) => await uploads(path, "snsset/task_attach");
+      const files = req.files;
+      console.log(files)
+      for (const file of files) {
+        const { path } = file;
+        const imgUrl = await uploader(path);
+        urls.push(imgUrl);
+        fs.unlinkSync(path);
+      }
+    }
     try{
-        await Task.findByIdAndUpdate(req.params.id,{$set:req.body}).then((data)=>{
+        await Task.findByIdAndUpdate(req.params.id,{images : urls}).then((data)=>{
             res.status(200).json({message:`successfully updated ${req.params.id}`})
         }).catch((error)=>res.status(404).json({error}))
     }
