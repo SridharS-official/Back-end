@@ -16,7 +16,6 @@ const uploads = (file, folder) => {
           url: result.url,
         });
       },
-
       {
         resource_type: "auto",
         folder: folder,
