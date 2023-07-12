@@ -37,70 +37,33 @@ const createEmployee = async (projectEmpData, res) => {
     }
 }
 
-const createProject=async(projectData,res)=>{
-    const OTP=otpgenerator.generate(4,{
-        upperCaseAlphabets:false,
-        specialChars:false,
-        lowerCaseAlphabets:false
-    })
-    const projectId = 'Project-'+ OTP
 
-    try{
-        const newProject = new Projects({
-            ...projectData,projectId
-        })
-        await newProject.save().then((data)=>{
-            res.status(200).json({data})
-        }).catch((error)=>res.status(404).json({error}))
+const createProject = async (projectData, res) => {
+    try {
+      const count = await Projects.countDocuments();
+      let projectId;
+      if (count >= 1) {
+        const latestProject = await Projects.findOne({}).sort({ _id: -1 }).exec();
+        const split = latestProject.projectId.split("-");
+        const prevProject = parseInt(split[1]);
+        const currentId = prevProject + 1;
+        projectId = "Project-" + currentId;
+      } else {
+        projectId = "Project-1000";
+      }
+  
+      const newProject = new Projects({
+        ...projectData,
+        projectId
+      });
+  
+      await newProject.save();
+      res.status(200).json({ data: newProject });
+    } catch (error) {
+      res.status(404).json({ error });
     }
-    catch(error){
-        res.status(404).json({error})
-    }
-}
-
-
-// const createProject = async (req, res) => {
-//     let projectData = req.body;
-//     Task.count().then(async (doc) => {
-//         if (doc >= 1) {
-//             Projects.findOne({}).sort({ _id: -1 }).exec().then(async function (data) {
-
-//                 try {
-//                     let split = data.projectId.split("-")
-//                     const prevProject = parseInt(split[1])
-//                     console.log(split)
-//                     const currentid = prevProject + 1;
-//                     const projectId = "Task-" + currentid
-//                     console.log(taskId)
-//                     const newProject = new Projects({
-//                         ...projectData, projectId
-//                     })
-//                     await newProject.save().then((data) => {
-//                         res.status(200).json({ data })
-//                     }).catch((error) => res.status(404).json({ error }))
-//                 }
-//                 catch (error) {
-//                     res.status(404).json({ error })
-//                 }
-//             })
-//         }
-//         else {
-//             try {
-//                 const projectId = "Project-1000";
-//                 const newProject = new Task({
-//                     ...projectData,
-//                     projectId
-//                 })
-//                 await newProject.save().then((data) => {
-//                     res.status(200).json(data)
-//                 }).catch((err) => res.status(404).json({ err }))
-//             }
-//             catch (err) {
-//                 res.status(500).json({ err })
-//             }
-//         }
-//     })
-// }
+  };
+  
 
 
 const getProjectById = async (req, res) => {
@@ -118,22 +81,9 @@ const getProjectById = async (req, res) => {
     }
 }
 
-// const deleteProjectById=async(req,res)=>{
-//     const project=await Projects.findById(req.params.id).exec()
-//     if(!project){
-//         res.status(404).json({message:`no project is Available in this id: ${req.params.id}`})
-//     }
-//     try{
-//         await Projects.deleteOne({_id:req.params.id}).then((data)=>{
-//             res.status(200).json({message:`Successfull deleted ${req.params.id}`})
-//         }).catch((error)=>res.status(404).json({error}))
-//     }
-//     catch(error){
-//         res.status(404).json({error})
-//     }
-// }
+
 const deleteProjectsByIds = async (req, res) => {
-    const projectIds = req.body.ids; // Array of project IDs to be deleted
+    const projectIds = req.body.ids; 
 
     try {
         const deleteResult = await Projects.deleteMany({ _id: { $in: projectIds } });
