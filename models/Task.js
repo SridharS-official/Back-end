@@ -66,10 +66,16 @@ const taskSchema = new mongoose.Schema(
     comment:{
       type : [String]
     },
-   attachment: {
-      data: Buffer,
-      contentType: String
-   },
+    images:[
+      {
+        public_id: {
+          type: String,
+        },
+        url: {
+          type: String,
+        },
+      },
+    ],
     name:{
       type:String,
     },

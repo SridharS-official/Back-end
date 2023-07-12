@@ -2,6 +2,7 @@ const Task=require('../models/Task')
 const mongoose=require('mongoose')
 const fs = require('fs');
 const path = require('path');
+const { uploads } = require('../utils/cloudinary');
 
 
 const getAllTasks=async(req,res)=>{
@@ -15,7 +16,20 @@ const getAllTasks=async(req,res)=>{
 }
 
 const createTask=async(req,res)=>{
-        let taskData = req.body;
+        const{project,taskname,reporter,assignee,priority,duedate,description,summary,story,deliveryteam,type,sprint,targetrelease} = req.body;
+        const {image} = req.files;
+        const urls = [];
+        if(image)
+        {
+          const uploader = async (path) => await uploads(path, "snsset/task_attach");
+          const files = req.files;
+          for (const file of files) {
+            const { path } = file;
+            const imgUrl = await uploader(path);
+            urls.push(imgUrl);
+            fs.unlinkSync(path);
+          }
+        }
         Task.count().then(async (doc)=>{
           if(doc>=1)
           {
@@ -23,13 +37,24 @@ const createTask=async(req,res)=>{
               try{
                 let split = data.taskId.split("-")
                 const prevtask = parseInt(split[1])
-                console.log(split)
                const currentid=prevtask+1;
                const taskId="Task-"+currentid
-               console.log(taskId)
                 const newTask=new Task({
-                  ...taskData,
-                  taskId
+                  project,
+                  taskname,
+                  reporter,
+                  assignee,
+                  priority,
+                  duedate,
+                  description,
+                  summary,
+                  story,
+                  deliveryteam,
+                  type,
+                  sprint,
+                  targetrelease,
+                  taskId,
+                  urls
                 })
                 await newTask.save().then((data)=>{
                   res.status(200).json(data)
@@ -120,33 +145,6 @@ const deleteMultiple=async(req,res)=>{
 }
 
 
-const savePdf = async (req, res) => {
-    const taskId = req.params.id;
-    console.log(req.files)
-    try {
-      // Find the task document by taskId
-      const task = await Task.findOne({ _id:taskId });
-      if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
-      }
-      if (!req.files) {
-        return res.status(400).json({ error: 'No file uploaded' });
-      }  
-      const { buffer, mimetype } = req.files;
-      task.pdf = {
-        data: req.files.file.data,
-        contentType: req.files.file.mimetype,
-      };
-      
-      console.log(task.pdf)
-      await task.save();
-      
-      return res.status(200).json({ message: 'PDF saved successfully' });
-    } catch (error) {
-      console.error('Error saving PDF:', error);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  };
 
 module.exports={
     getAllTasks,
@@ -155,5 +153,4 @@ module.exports={
     updateTaskById,
     deleteTaskById,
     deleteMultiple,
-    savePdf
 }
