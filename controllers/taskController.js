@@ -1,8 +1,6 @@
 const Task=require('../models/Task')
 const mongoose=require('mongoose')
 const fs = require('fs');
-const path = require('path');
-const { uploads } = require('../utils/cloudinary');
 
 
 const getAllTasks=async(req,res)=>{
@@ -17,16 +15,6 @@ const getAllTasks=async(req,res)=>{
 
 const createTask=async(req,res)=>{
         const{Project,taskname,reporter,assignee,priority,duedate,description,summary,story,deliveryteam,type,sprint,targetrelease} = req.body;
-        const urls = [];
-        if(req.files)
-        {
-          const uploader = async (path) => await uploads(path, "snsset/task_attach");
-          const files = req.files;
-            const { path } = files;
-            const imgUrl = await uploader(path);
-            urls.push(imgUrl);
-            fs.unlinkSync(path);
-        }
         Task.count().then(async (doc)=>{
           if(doc>=1)
           {
@@ -51,7 +39,6 @@ const createTask=async(req,res)=>{
                   sprint,
                   targetrelease,
                   taskId,
-                  urls
                 })
                 await newTask.save().then((data)=>{
                   res.status(200).json(data)
@@ -101,19 +88,6 @@ const updateTaskById=async(req,res)=>{
     const task=await Task.findById(req.params.id).exec()
     if(!task){
         return  res.status(404).json({message:`no id is available ${req.params.id}`})
-    }
-    const urls = [];
-    if(req.files)
-    {
-      const uploader = async (path) => await uploads(path, "snsset/task_attach");
-      const files = req.files;
-      console.log(files)
-      for (const file of files) {
-        const { path } = file;
-        const imgUrl = await uploader(path);
-        urls.push(imgUrl);
-        fs.unlinkSync(path);
-      }
     }
     try{
         await Task.findByIdAndUpdate(req.params.id,{images : urls}).then((data)=>{

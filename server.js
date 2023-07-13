@@ -16,12 +16,10 @@ const cors=require('cors')
 const logger=require('morgan')
 
 
-// app.use(express.json())//parsing 
+app.use(express.json())//parsing 
 app.use(cors())//to handle wrong port number
 app.use(logger('dev'))
 app.use(fileUpload())
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 connectDB();
 
 app.use('/server/auth',authentication)
