@@ -90,7 +90,7 @@ const updateTaskById=async(req,res)=>{
         return  res.status(404).json({message:`no id is available ${req.params.id}`})
     }
     try{
-        await Task.findByIdAndUpdate(req.params.id,{images : urls}).then((data)=>{
+        await Task.findByIdAndUpdate(req.params.id,{$set:req.body}).then((data)=>{
             res.status(200).json({message:`successfully updated ${req.params.id}`})
         }).catch((error)=>res.status(404).json({error}))
     }
