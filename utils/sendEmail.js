@@ -16,15 +16,5 @@ const sendEmail = (options)=>{
         html: options.text,
       };
       
-
-    transporter.sendMail(mailOptions,function (err,info) {
-        if(err){
-            console.log(err);
-        }
-        else{
-            console.log(info);
-        } 
-    })
-}
-
-module.exports=sendEmail;
+    }
+module.exports = sendEmail;

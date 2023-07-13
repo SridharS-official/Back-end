@@ -5,8 +5,14 @@ const {
     register,
     login,
     forgotpassword,
-    resetpassword
+    resetpassword,
+    getUserById,
+    getAllUsers
 }=require('../controllers/auth')
+
+router.route('/user').get(getAllUsers)
+
+router.route('/user/:id').get(getUserById)
 
 router.route('/register').post(register);
 
