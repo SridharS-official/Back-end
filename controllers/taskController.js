@@ -22,12 +22,10 @@ const createTask=async(req,res)=>{
         {
           const uploader = async (path) => await uploads(path, "snsset/task_attach");
           const files = req.files;
-          for (const file of files) {
-            const { path } = file;
+            const { path } = files;
             const imgUrl = await uploader(path);
             urls.push(imgUrl);
             fs.unlinkSync(path);
-          }
         }
         Task.count().then(async (doc)=>{
           if(doc>=1)
