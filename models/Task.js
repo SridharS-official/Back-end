@@ -63,9 +63,15 @@ const taskSchema = new mongoose.Schema(
     type:String,
     required:true
     },
-    comment:{
-      type : [String]
-    },
+    comment:[{
+      comment : {
+        type: String
+      },
+      time: {
+      type: Date
+      }
+
+    }],
     images:[
       {
         public_id: {
