@@ -6,6 +6,7 @@ const app = express();
 const connectDB = require('./config/dbConn');
 const taskRouter=require('./routes/taskRoutes')
 const projectRouter=require('./routes/projectRoutes')
+const projectRecycleRouter = require('./routes/projectRecycleRoute')
 const authentication=require('./routes/auth')
 const getPrivateData=require('./routes/private')
 const errorHandler=require('./middleware/error')
@@ -22,6 +23,7 @@ app.use(logger('dev'))
 app.use(fileUpload())
 connectDB();
 
+app.use('/server/recycle',projectRecycleRouter)
 app.use('/server/auth',authentication)
 app.use('/task',taskRouter)
 app.use('/server',projectRouter)
