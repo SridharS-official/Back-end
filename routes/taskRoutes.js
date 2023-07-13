@@ -2,6 +2,11 @@ const express=require('express')
 const router=express.Router()
 const {getAllTasks, createTask,getTaskById,updateTaskById,deleteTaskById, deleteMultiple}=require('../controllers/taskController')
 const { upload } = require('../utils/multer')
+const config = {
+    api: {
+      bodyParser: false,
+    },
+  };
 
 const uploadmiddleware = upload.array("image")
 router.get('/task-list',async(req,res)=>{

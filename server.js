@@ -9,16 +9,19 @@ const projectRouter=require('./routes/projectRoutes')
 const authentication=require('./routes/auth')
 const getPrivateData=require('./routes/private')
 const errorHandler=require('./middleware/error')
+const bodyParser = require('body-parser');
 const PORT=process.env.PORT||8080
 //const PORT=5000
 const cors=require('cors')
 const logger=require('morgan')
 
 
-app.use(express.json())//parsing 
+// app.use(express.json())//parsing 
 app.use(cors())//to handle wrong port number
 app.use(logger('dev'))
 app.use(fileUpload())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 connectDB();
 
 app.use('/server/auth',authentication)
