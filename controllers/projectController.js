@@ -1,7 +1,8 @@
 const Projects = require('../models/Projects')
 const ProjectEmp = require('../models/ProjectEmp')
+const ProjectRecycle = require('../models/ProjectRecycle')
 const mangoose = require('mongoose')
-const otpgenerator = require('otp-generator')
+// const otpgenerator = require('otp-generator')
 
 const getAllProjects = async (req, res) => {
     try {
@@ -86,18 +87,38 @@ const deleteProjectsByIds = async (req, res) => {
     const projectIds = req.body.ids; 
 
     try {
-        const deleteResult = await Projects.deleteMany({ _id: { $in: projectIds } });
-
-        if (deleteResult.deletedCount === 0) {
-            res.status(404).json({ message: `No projects found with the given IDs` });
-        } else {
-            res.status(200).json({ message: `Successfully deleted ${deleteResult.deletedCount} projects` });
-        }
+      const projectsToDelete = await Projects.find({ _id: { $in: projectIds } });
+  
+      if (projectsToDelete.length === 0) {
+        res.status(404).json({ message: `No projects found with the given IDs` });
+        return;
+      }
+  
+      const recycledProjects = projectsToDelete.map(async project => {
+        const { _id, status, scrum, lead, powner, name, projectId, description,memb } = project;
+        const newProjectRecycle = new ProjectRecycle({
+          _id,
+          status,
+          scrum,
+          lead,
+          powner,
+          name,
+          memb,
+          projectId,
+          description
+        });
+        await newProjectRecycle.save();
+      });
+  
+      await Projects.deleteMany({ _id: { $in: projectIds } });
+  
+      res.status(200).json({ message: `Successfully deleted ${projectsToDelete.length} projects` });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
     }
-};
-
+  };
+  
+  
 
 const updateProjectById = async (req, res) => {
     const Project = await Projects.findById(req.params.id).exec()
@@ -118,7 +139,7 @@ module.exports = {
     getAllProjects,
     createProject,
     getProjectById,
-    deleteProjectsByIds, // Updated function name
+    deleteProjectsByIds,
     updateProjectById,
     getEmployee,
     createEmployee
