@@ -3,6 +3,21 @@ const User = require('../models/User')
 const ErrorResponse=require('../utils/errorResponse');
 const sendEmail = require('../utils/sendEmail');
 
+const getUserById=async(req,res)=>{
+  const user=await User.findById(req.params.id).exec()
+  if(!user){
+      res.status(404).json({message:`no project is Available in this id: ${req.params.id}`})
+  }
+  try{
+      await User.findOne({_id:req.params.id}).then((data)=>{
+          res.status(200).json({message:"Successfull",data})
+      }).catch((error)=>res.status(404).json({error}))
+  }
+  catch(error){
+      res.status(404).json({error})
+  }
+}
+
 const register = async (req, res, next) => {
     const { firstname,lastname, password, email } = req.body;
     try {
@@ -130,5 +145,6 @@ module.exports = {
     register,
     login,
     forgotpassword,
-    resetpassword
+    resetpassword,
+    getUserById
 }
