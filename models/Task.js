@@ -76,24 +76,26 @@ const taskSchema = new mongoose.Schema(
         },
       },
     ],
-    name:{
-      type:String,
-    },
-    startTime:{
-      type:String,
-    },
-    endTime:{
-      type:String,
-    },
-    workingHour:{
-      type:String,
-    },
-    date:{
-      type:String,
-    },
-    details:{
-      type:String,
-    }
+    worklog:[ {
+      name:{
+       type:String,
+     } ,
+     startTime:{
+       type:String,
+     },
+     endTime:{
+       type:String,
+     },
+     workingHour:{
+       type:String,
+     },
+     date:{
+       type:String,
+     },
+     details:{
+       type:String,
+     }
+   }]
   },
   {
     timestamps: true,
