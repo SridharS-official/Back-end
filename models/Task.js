@@ -8,27 +8,27 @@ const taskSchema = new mongoose.Schema(
   {
     taskId: {
       type: String,
-      required: true,
+      required: false,
     },
     Project: {
       type: String,
-      required: true,
+      required: false,
     },
     taskname: {
       type: String,
-      required: true,
+      required: false,
     },
     reporter: {
       type: [String],
-      required: true,
+      required: false,
     },
     assignee: {
       type: String,
-      required: true,
+      required: false,
     },
     priority: {
       type: String,
-      required: true,
+      required: false,
     },
     status: {
       type: String,
@@ -36,11 +36,11 @@ const taskSchema = new mongoose.Schema(
     },
     duedate: {
       type: Date,
-      required: true,
+      required: false,
     },
     description: {
       type: String,
-      required: true,
+      required: false,
     },
     summary: {
       type: String,
@@ -61,24 +61,19 @@ const taskSchema = new mongoose.Schema(
     },
    type: {
     type:String,
-    required:true
+    required:false
     },
     comment:{
       type : [String]
     },
-    images:[
-      {
-        public_id: {
-          type: String,
-        },
-        url: {
-          type: String,
-        },
-      },
-    ],
-    name:{
-      type:String,
+    attachment:{
+      data:Buffer,
+      contentType:String
     },
+    worklog:[ {
+     name:{
+      type:String,
+    } ,
     startTime:{
       type:String,
     },
@@ -94,9 +89,10 @@ const taskSchema = new mongoose.Schema(
     details:{
       type:String,
     }
+  }],
   },
   {
-    timestamps: true,
+    timestamps: false,
   }
 );
 
