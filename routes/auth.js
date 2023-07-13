@@ -6,8 +6,11 @@ const {
     login,
     forgotpassword,
     resetpassword,
-    getUserById
+    getUserById,
+    getAllUsers
 }=require('../controllers/auth')
+
+router.route('/user').get(getAllUsers)
 
 router.route('/user/:id').get(getUserById)
 
